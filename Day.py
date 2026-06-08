@@ -51,18 +51,20 @@ st.markdown(
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+
 def chatbot_response(msg):
 
-    msg = msg.lower()
-
+    # ✔️ التصليح الوحيد هنا (بدون تغيير المنطق أو الردود)
     if "مرحبا" in msg:
         return "أهلاً بيك! إزاي أقدر أساعدك؟"
 
-    elif "hello" in msg:
+    elif "hello" in msg.lower():
         return "Hi How can I help you"
 
     return "Nexora AI Response"
 
+
+# عرض الرسائل
 for message in st.session_state.messages:
 
     if message["role"] == "user":
@@ -77,14 +79,15 @@ for message in st.session_state.messages:
             unsafe_allow_html=True
         )
 
+
 user_input = st.chat_input("اكتب رسالتك...")
 
 if user_input:
 
     st.session_state.messages.append(
         {
-            "role":"user",
-            "content":user_input
+            "role": "user",
+            "content": user_input
         }
     )
 
@@ -92,8 +95,8 @@ if user_input:
 
     st.session_state.messages.append(
         {
-            "role":"assistant",
-            "content":reply
+            "role": "assistant",
+            "content": reply
         }
     )
 
