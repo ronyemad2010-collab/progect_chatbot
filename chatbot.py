@@ -16,7 +16,6 @@ def chatbot_response(user_input):
         return "Hi How can I help you"
 
     elif "سعر" in user_input:
-        last_topic = "price"
         return """💰 💻 قائمة أسعار Nexora (متوسط)
 
 🧑‍💻 أولًا: البرمجة (Web & Apps)
@@ -51,7 +50,6 @@ def chatbot_response(user_input):
 """
 
     elif "price" in user_input:
-        last_topic = "price"
         return """💰 💻 Nexora Price List (Average)
 
 🧑‍💻 First: Programming (Web & Apps)
@@ -86,7 +84,6 @@ Complete Business Plan: $150-$500
 """
 
     elif "خدمات" in user_input:
-        last_topic = "services"
         return """🚀 قائمة خدمات Nexora
 
 نقدم حلول متكاملة تساعدك تبدأ وتكبر مشروعك باحترافية، من الفكرة لحد النجاح.
@@ -131,7 +128,6 @@ Complete Business Plan: $150-$500
 """
 
     elif "services" in user_input:
-        last_topic = "services"
         return """🚀 Nexora Services List
 
 We offer comprehensive solutions to help you start and grow your business professionally.
