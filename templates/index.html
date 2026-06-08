@@ -1,130 +1,100 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<title>Nexora Chat</title>
+import streamlit as st
 
+st.set_page_config(
+    page_title="Nexora Chat",
+    page_icon="💬",
+    layout="centered"
+)
+
+st.markdown("""
 <style>
-body {
-    font-family: Arial;
-    background: linear-gradient(135deg, #4a90e2, #6a11cb);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+
+.stApp{
+    background: linear-gradient(135deg,#4a90e2,#6a11cb);
 }
 
-.chat-container {
-    width: 350px;
-    height: 500px;
-    background: white;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    overflow: hidden;
+.chat-header{
+    background:#4a90e2;
+    color:white;
+    padding:15px;
+    border-radius:15px;
+    text-align:center;
+    font-size:24px;
+    font-weight:bold;
+    margin-bottom:20px;
 }
 
-.chat-header {
-    background: #4a90e2;
-    color: white;
-    padding: 15px;
-    text-align: center;
-    font-weight: bold;
+.user-msg{
+    background:#4a90e2;
+    color:white;
+    padding:10px;
+    border-radius:15px 15px 0px 15px;
+    margin:5px;
 }
 
-.chat-box {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+.bot-msg{
+    background:#eeeeee;
+    color:black;
+    padding:10px;
+    border-radius:15px 15px 15px 0px;
+    margin:5px;
 }
 
-.user {
-    align-self: flex-end;
-    background: #4a90e2;
-    color: white;
-    padding: 10px;
-    border-radius: 15px 15px 0 15px;
-    margin: 5px;
-    max-width: 70%;
-}
-
-.bot {
-    align-self: flex-start;
-    background: #eee;
-    padding: 10px;
-    border-radius: 15px 15px 15px 0;
-    margin: 5px;
-    max-width: 70%;
-}
-
-.chat-input {
-    display: flex;
-    border-top: 1px solid #ddd;
-}
-
-.chat-input input {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    outline: none;
-}
-
-.chat-input button {
-    background: #4a90e2;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-}
-
-.chat-input button:hover {
-    background: #357ABD;
-}
 </style>
-</head>
+""", unsafe_allow_html=True)
 
-<body>
+st.markdown(
+    '<div class="chat-header">💬 Nexora Support</div>',
+    unsafe_allow_html=True
+)
 
-<div class="chat-container">
-    <div class="chat-header">💬 Nexora Support</div>
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    <div class="chat-box" id="chat"></div>
+def chatbot_response(msg):
 
-    <div class="chat-input">
-        <input id="msg" placeholder="اكتب رسالتك...">
-        <button onclick="send()">إرسال</button>
-    </div>
-</div>
+    msg = msg.lower()
 
-<script>
-async function send() {
-    let input = document.getElementById("msg");
-    let message = input.value;
+    if "مرحبا" in msg:
+        return "أهلاً بيك! إزاي أقدر أساعدك؟"
 
-    if (message.trim() === "") return;
+    elif "hello" in msg:
+        return "Hi How can I help you"
 
-    let chat = document.getElementById("chat");
+    return "Nexora AI Response"
 
-    chat.innerHTML += `<div class="user">${message}</div>`;
+for message in st.session_state.messages:
 
-    input.value = "";
+    if message["role"] == "user":
+        st.markdown(
+            f'<div class="user-msg">{message["content"]}</div>',
+            unsafe_allow_html=True
+        )
 
-    let res = await fetch("/chat", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({message: message})
-    });
+    else:
+        st.markdown(
+            f'<div class="bot-msg">{message["content"]}</div>',
+            unsafe_allow_html=True
+        )
 
-    let data = await res.json();
+user_input = st.chat_input("اكتب رسالتك...")
 
-    chat.innerHTML += `<div class="bot">${data.reply}</div>`;
+if user_input:
 
-    chat.scrollTop = chat.scrollHeight;
-}
-</script>
+    st.session_state.messages.append(
+        {
+            "role":"user",
+            "content":user_input
+        }
+    )
 
-</body>
-</html>
+    reply = chatbot_response(user_input)
+
+    st.session_state.messages.append(
+        {
+            "role":"assistant",
+            "content":reply
+        }
+    )
+
+    st.rerun()
