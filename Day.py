@@ -52,19 +52,35 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 
+# ================= BOT =================
 def chatbot_response(msg):
 
-    # ✔️ التصليح الوحيد هنا (بدون تغيير المنطق أو الردود)
+    msg = msg.lower().strip()
+
     if "مرحبا" in msg:
         return "أهلاً بيك! إزاي أقدر أساعدك؟"
 
-    elif "hello" in msg.lower():
+    elif "hello" in msg:
         return "Hi How can I help you"
 
-    return "Nexora AI Response"
+    elif "سعر" in msg or "price" in msg:
+        return "💰 عندنا أسعار مختلفة حسب الخدمة، قولّي عايز إيه"
+
+    elif "خدمات" in msg or "services" in msg:
+        return "🚀 بنقدم برمجة + تسويق + استشارات"
+
+    elif "مواعيد" in msg or "working hours" in msg:
+        return "متاح من 9 صباحًا إلى 5 مساءً"
+
+    elif "خصم" in msg or "discount" in msg:
+        return "نعم يوجد خصومات على المشاريع الكبيرة 👍"
+
+    # ❌ مهم جدًا: بدل AI response
+    else:
+        return "أنا مش فاهم الرسالة، ممكن توضح أكتر؟ 🤖"
 
 
-# عرض الرسائل
+# ================= عرض الرسائل =================
 for message in st.session_state.messages:
 
     if message["role"] == "user":
@@ -72,7 +88,6 @@ for message in st.session_state.messages:
             f'<div class="user-msg">{message["content"]}</div>',
             unsafe_allow_html=True
         )
-
     else:
         st.markdown(
             f'<div class="bot-msg">{message["content"]}</div>',
@@ -80,24 +95,21 @@ for message in st.session_state.messages:
         )
 
 
+# ================= إدخال المستخدم =================
 user_input = st.chat_input("اكتب رسالتك...")
 
 if user_input:
 
-    st.session_state.messages.append(
-        {
-            "role": "user",
-            "content": user_input
-        }
-    )
+    st.session_state.messages.append({
+        "role": "user",
+        "content": user_input
+    })
 
     reply = chatbot_response(user_input)
 
-    st.session_state.messages.append(
-        {
-            "role": "assistant",
-            "content": reply
-        }
-    )
+    st.session_state.messages.append({
+        "role": "assistant",
+        "content": reply
+    })
 
     st.rerun()
